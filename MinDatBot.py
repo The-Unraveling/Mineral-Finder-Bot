@@ -1,3 +1,6 @@
+# MinDatBot.py
+# Author: The-Unraveling
+
 
 # WILL RUN FOREVER, REMEMBER TO CTRL-C TO EXIT IF NEED TO KILL
 import praw
