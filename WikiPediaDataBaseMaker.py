@@ -3,7 +3,7 @@ import os
 import re
 import codecs
 
-minerals = wikipedia.page("List of minerals")
+minerals = wikipedia.page("List of rock types")
 
 print minerals.title
 
@@ -25,7 +25,7 @@ else:
 
 i = 0
 for i in range(0,len(minerals.links)):
-    current_mineral = wikipedia.page(minerals.links[i])
+    current_mineral = wikipedia.page(minerals.links[i], "lxml")
 
     title = current_mineral.title
 
