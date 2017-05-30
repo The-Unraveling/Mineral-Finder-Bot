@@ -15,6 +15,10 @@ else:
         comments_bot_made = comments_bot_made.split("\n")
         comments_bot_made = list(filter(None, comments_bot_made))
 
+if not os.path.isfile("hated_comment_text.txt"):
+    print "hated_comment_text.txt not found, making file..."
+    hated_comment_text = []
+
 
 i = 0
 
@@ -23,6 +27,10 @@ while i < (len(comments_bot_made) - 1):
     bot_hate_check = reddit.comment(comments_bot_made[i])
     print bot_hate_check.score
     if bot_hate_check.score < -1:
+        with open("hated_comment_text.txt", "a") as hate:
+            hate.write(bot_hate_check.parent())
+            hate.write(bot_hate_check.body)
+            hate.write("\n")
         bot_hate_check.delete()
     i += 1
 
