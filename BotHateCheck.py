@@ -1,5 +1,6 @@
 import os
 import praw
+import re
 
 reddit = praw.Reddit('MineralFinderBot')  # SET UP NEW CLIENT AND ALL THAT, ALL IN PRAW.INI
 
@@ -19,18 +20,38 @@ if not os.path.isfile("hated_comment_text.txt"):
     print "hated_comment_text.txt not found, making file..."
     hated_comment_text = []
 
+if not os.path.isfile("hated_comment_parents.txt"):
+    print "hated_comment_parents.txt not found, making file..."
+    hated_comment_parents = []
+else:
+    # read file into a list and remove any empsy values
+    with open("hated_comment_parents.txt", "r") as f:
+        print "hated_comment_parents.txt found, reading file:"
+        hated_comment_parents = f.read()
+        hated_comment_parents = hated_comment_parents.split("\n")
+        hated_comment_parents = list(filter(None, hated_comment_parents))
 
 i = 0
 
 print "Starting hate check..."
 while i < (len(comments_bot_made) - 1):
     bot_hate_check = reddit.comment(comments_bot_made[i])
-    print bot_hate_check.score
+    print bot_hate_check.id, "Score: ", bot_hate_check.score
     if bot_hate_check.score < -1:
-        with open("hated_comment_text.txt", "a") as hate:
-            hate.write(bot_hate_check.parent())
-            hate.write(bot_hate_check.body)
-            hate.write("\n")
+        parent = bot_hate_check.parent()
+        if parent.id not in hated_comment_parents:
+            with open("hated_comment_text.txt", "a") as h:
+
+
+                h.write(parent.body)
+                h.write(bot_hate_check.body)
+                h.write("\n")
+
+            with open("hated_comment_parents.txt", "a") as h:
+                h.write(parent.id)
+                h.write("\n")
+
+            hated_comment_parents.append(parent.id)
         bot_hate_check.delete()
     i += 1
 

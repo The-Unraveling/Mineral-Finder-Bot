@@ -29,7 +29,7 @@ def main():
 
     print "Done!"
 
-    subreddit = reddit.subreddit('mineralfinderbot') #whatsthisrock
+    subreddit = reddit.subreddit('whatsthisrock') #whatsthisrock
 
     # Have we run this code before? If not, create empty list
     if not os.path.isfile("comments_replied_to.txt"):
