@@ -105,13 +105,11 @@ def main():
                 if not re.match('MineralFinderBot|throwAwayBotToday',author.name):
 
                     comment_time = comment.created_utc
-                    #comment_time = datetime.datetime.utcfromtimestamp(comment.created)
-                    #print comment_time
+
                     current_time = time.time()
-                    #print current_time
-                    #print comment_time
-                    format = '%H:%M:%S.%f'
+                    
                     time_diff = current_time - comment_time
+
                     print time_diff, " seconds old"
 
                     if time_diff < 3600: # if comment is less than an hour old, post reply
@@ -146,15 +144,6 @@ def main():
 
                         i = 0
                         mineral_links = ""
-
-
-                        #NEW VARIABLES
-                        # COMMENT_TITLE
-                        # COMMENT_WIKI_LINK
-                        # COMMENT_GOOGLE_IMAGES
-                        # COMMENT_WIKI_IMAGES
-
-                        # FOR LOOP TO ATTACH/APPEND MINERAL STUFF TO FINSHED_MINERAL_REPLY
 
                         while i < len(minerals_replying_to):
 
@@ -215,7 +204,6 @@ def main():
                         finished_mineral_reply += mineral_links
                         finished_mineral_reply += bot_beep_boop
 
-                        #print finished_mineral_reply
                         print "Posting comment..."
 
                         comment.reply(finished_mineral_reply)
@@ -244,7 +232,5 @@ def main():
     print len(comments_replied_to)
     print "comments"
 
-    # Set up comment deletion code??
-    # If score of any commented comment goes under -1, comment is deleted
 
 main()
