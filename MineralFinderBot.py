@@ -8,7 +8,6 @@ import codecs
 import wikipedia
 import datetime
 import time
-import pytz
 
 # WRITE CERTAIN INFO(BOT STARTING, BOT COMMENTING) TO A TXT FILE..
 
@@ -20,7 +19,7 @@ def main():
 
     date_format='%m/%d/%Y %H:%M:%S %Z'
     date = datetime.datetime.now()
-    #local_tz = pytz.timezone('US/Pacific')
+
 
     print "Opening/Reading mineral name file..."
     with codecs.open("mineral_names_on_wiki.txt", "r") as f:
@@ -30,7 +29,7 @@ def main():
 
     print "Done!"
 
-    subreddit = reddit.subreddit('whatsthisrock')
+    subreddit = reddit.subreddit('mineralfinderbot') #whatsthisrock
 
     # Have we run this code before? If not, create empty list
     if not os.path.isfile("comments_replied_to.txt"):
@@ -68,13 +67,13 @@ def main():
 
         if comment.id not in comments_replied_to:
 
-        #print(submission title)
+            #print(submission.title)
 
             i = 0
 
             for i in range(0, len(mineral_names_on_wiki)):
 
-                possible_mineral_match = re.search(mineral_names_on_wiki[i], comment.body, re.IGNORECASE)
+                possible_mineral_match = re.search('\\b' + mineral_names_on_wiki[i] + '\\b', comment.body, re.IGNORECASE)
                 # Search comments for mineral keywords
 
                 if possible_mineral_match:
@@ -83,10 +82,10 @@ def main():
 
 
             if possible_mineral_match:
-                possible_mineral_name = re.findall(mineral_names_on_wiki[i], comment.body, re.IGNORECASE)
+                possible_mineral_name = re.findall('\\b' + mineral_names_on_wiki[i] + '\\b', comment.body, re.IGNORECASE)
 
                 for i in range(i+1,len(mineral_names_on_wiki)):
-                    possible_mineral_name_next = re.findall('\\b' + mineral_names_on_wiki[i] + '\\b', comment.body, re.IGNORECASE)
+                    possible_mineral_name_next = re.findall('\\b' + mineral_names_on_wiki[i] + '\\b',comment.body, re.IGNORECASE)
                     if all(possible_mineral_name_next):
 
                         if len(possible_mineral_name_next) > 0:
@@ -119,8 +118,8 @@ def main():
                         print "author:", author.name
                         print "\n", "Comment text: ", comment.body
 
-                        mineral_greeting = "Talking about minerals? Maybe I can help!  " + "&nbsp;  " + "\n" \
-                                               "These are the minerals I found within your comment:  "
+                        #"Talking about minerals? Maybe I can help!  " + "&nbsp;  " + "\n" \
+                        mineral_greeting = "These are the minerals I found within your comment:  "
 
                         mineral_greeting_part2 = ""
                         i = 0
@@ -150,7 +149,7 @@ def main():
                             this_mineral = minerals_replying_to[i]
 
                             mineral_links += "### " + minerals_replying_to[i].lower() + "  \n"\
-                                             " [Wikiepedia link to " + \
+                                             " [Wikipedia page for " + \
                                              minerals_replying_to[i].lower() + \
                                         "]" + "("
 
@@ -167,8 +166,8 @@ def main():
 
                             mineral_links += "Photos: |  " + "\n"\
                                              ":-------|  " + "\n"\
-                                "[Google images] (" + "https://www.google.com/search?tbm=isch&q="\
-                                + minerals_replying_to[i] + "+mineral): |  " + "\n"
+                                "[Link to Google images:] (" + "https://www.google.com/search?tbm=isch&q="\
+                                + minerals_replying_to[i] + "+mineral) |  " + "\n"
 
                             j =0; k = 1
                             while j < image_length and k <= 3: # changes number of wiki images added
@@ -195,8 +194,8 @@ def main():
 
                         bot_beep_boop = "beep ^boop, I'm a bot! If you have any questions, " \
                                         "or suggestions on how my programmer can make me better, " \
-                                        "send me a PM or add a suggestion to [r/MineralFinderBot]" \
-                                        "(reddit.com/r/MineralFinderBot) Comment will be deleted " \
+                                        "send me a PM or add a suggestion to r/MineralFinderBot." \
+                                        "Comment will be deleted " \
                                         "if score drops below -1."
 
                         finished_mineral_reply = ""
@@ -204,6 +203,8 @@ def main():
                         finished_mineral_reply += mineral_links
                         finished_mineral_reply += bot_beep_boop
 
+
+                        print finished_mineral_reply
                         print "Posting comment..."
 
                         comment.reply(finished_mineral_reply)
