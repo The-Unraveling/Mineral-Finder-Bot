@@ -256,6 +256,7 @@ def main():
                                 if comment.id not in comments_bot_made:
                                     myfile.write(comment.id + "\n")
                             comments_bot_made.append(comment.id)
+                            open("comments_bot_submissions.txt", "a")
 
 
 
