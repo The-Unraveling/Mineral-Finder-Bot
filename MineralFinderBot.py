@@ -61,7 +61,7 @@ def main():
     print "Begin monitoring comments..."
     print "Time: ", date.strftime(date_format)
     for comment in subreddit.stream.comments():    #this line allows for indefinite running(DANGEROUS ON BIG SUBREDDITS)
-                                                    #ADD comment age filter if implementing this style
+
     #for submission in subreddit.hot(limit=5):       #IN ORDER TO RUN ON SCHEDULER
         #submission.comments.replace_more(limit=0)   #UNCOMMENT THESE 3 LINES
         #for comment in submission.comments.list():  #COMMENT LINE ABOVE, INDENT CODE BELOW
@@ -107,7 +107,7 @@ def main():
                     comment_time = comment.created_utc
 
                     current_time = time.time()
-                    
+
                     time_diff = current_time - comment_time
 
                     print time_diff, " seconds old"
