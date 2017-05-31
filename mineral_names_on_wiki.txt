@@ -1438,7 +1438,6 @@ Zunyite
 Zussmanite
 Zykaite
 Åkermanite
-Lava
 Adakite
 Monzonite
 Alkali feldspar
@@ -1450,7 +1449,6 @@ Aphanite
 Aplite
 Appetite
 Argillite
-Arkansas
 Arkose
 Trachyandesite
 Basanite
@@ -1467,7 +1465,6 @@ Chalk
 Charnockite
 Chert
 Clay
-Coal
 Coccolith
 Comendite
 Conglomerate (geology)
@@ -1486,7 +1483,6 @@ Epidosite
 Essexite
 Evaporite
 Felsite
-Flint
 Foidolite
 Gabbro
 Ganister
@@ -1542,7 +1538,6 @@ Nepheline syenite
 Nephelinite
 Norite
 Novaculite
-Oklahoma
 Oolite
 Paleosol
 Pantellerite
