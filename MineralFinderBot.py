@@ -43,7 +43,7 @@ def main():
 
     print "Done!"
 
-    subreddit = reddit.subreddit('whatsthisrock') #whatsthisrock #add whatisthisthing ?
+    subreddit = reddit.subreddit('whatsthisrock+whatisthisthing') #whatsthisrock #add whatisthisthing ?
 
     # Have we run this code before? If not, create empty list
     if not os.path.isfile("comments_replied_to.txt"):
@@ -87,7 +87,7 @@ def main():
     print "Time: ", date.strftime(date_format)
     #for comment in subreddit.stream.comments():    #this line allows for indefinite running(DANGEROUS ON BIG SUBREDDITS)
 
-    for submission in subreddit.new(limit=5):       #IN ORDER TO RUN ON SCHEDULER
+    for submission in subreddit.new(limit=10):       #IN ORDER TO RUN ON SCHEDULER
         submission.comments.replace_more(limit=0)   #UNCOMMENT THESE 3 LINES
         for comment in submission.comments.list():  #COMMENT LINE ABOVE, INDENT CODE BELOW
 
