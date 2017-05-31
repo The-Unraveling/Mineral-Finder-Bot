@@ -1,6 +1,6 @@
 import os
 import praw
-import re
+import sys
 
 reddit = praw.Reddit('MineralFinderBot')  # SET UP NEW CLIENT AND ALL THAT, ALL IN PRAW.INI
 
@@ -56,3 +56,5 @@ while i < (len(comments_bot_made) - 1):
     i += 1
 
 print "Hate check done!"
+
+sys.exit()

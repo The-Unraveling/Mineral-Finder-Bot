@@ -8,6 +8,7 @@ import codecs
 import wikipedia
 import datetime
 import time
+import sys
 
 # WRITE CERTAIN INFO(BOT STARTING, BOT COMMENTING) TO A TXT FILE..
 
@@ -247,6 +248,11 @@ def main():
                                 date = datetime.datetime.now()
                                 print "Comment posted at " + date.strftime(date_format)
 
+                                with open("comments_bot_made.txt", "a") as myfile:
+                                    if comment.id not in comments_bot_made:
+                                        myfile.write(comment.id + "\n")
+                                comments_bot_made.append(comment.id)
+
                                 print "Bot has now replied to "
                                 print len(comments_replied_to)
                                 print "comments!"
@@ -270,3 +276,5 @@ def main():
 #open_read("mineral_names_on_wiki")
 
 main()
+
+sys.exit()
