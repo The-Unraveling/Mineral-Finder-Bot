@@ -248,11 +248,6 @@ def main():
                                 date = datetime.datetime.now()
                                 print "Comment posted at " + date.strftime(date_format)
 
-                                with open("comments_bot_made.txt", "a") as myfile:
-                                    if comment.id not in comments_bot_made:
-                                        myfile.write(comment.id + "\n")
-                                comments_bot_made.append(comment.id)
-
                                 print "Bot has now replied to "
                                 print len(comments_replied_to)
                                 print "comments!"
@@ -261,7 +256,7 @@ def main():
                             with open("comments_bot_made.txt", "a") as myfile:
                                 if comment.id not in comments_bot_made:
                                     myfile.write(comment.id + "\n")
-                            comments_bot_made.append(comment.id)
+                                    comments_bot_made.append(comment.id)
                             open("comments_bot_submissions.txt", "a")
 
 
