@@ -43,7 +43,7 @@ def main():
 
     print "Done!"
 
-    subreddit = reddit.subreddit('whatsthisrock') #whatsthisrock
+    subreddit = reddit.subreddit('whatsthisrock') #whatsthisrock #add whatisthisthing ?
 
     # Have we run this code before? If not, create empty list
     if not os.path.isfile("comments_replied_to.txt"):
@@ -225,7 +225,7 @@ def main():
                                                 "or suggestions on how my programmer can make me better, " \
                                                 "send me a PM or add a suggestion to r/MineralFinderBot." \
                                                 "Comment will be deleted " \
-                                                "if score drops below -1."
+                                                "if score drops to -1 or below."
 
                                 finished_mineral_reply = ""
                                 finished_mineral_reply += mineral_greeting

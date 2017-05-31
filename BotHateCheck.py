@@ -37,7 +37,7 @@ print "Starting hate check..."
 while i < (len(comments_bot_made) - 1):
     bot_hate_check = reddit.comment(comments_bot_made[i])
     print bot_hate_check.id, "Score: ", bot_hate_check.score
-    if bot_hate_check.score < -1:
+    if bot_hate_check.score <= -1:
         parent = bot_hate_check.parent()
         if parent.id not in hated_comment_parents:
             with open("hated_comment_text.txt", "a") as h:
