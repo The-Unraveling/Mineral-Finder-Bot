@@ -10,12 +10,16 @@ import datetime
 import time
 import sys
 
+import mwparserfromhell
+import pywikibot
+
 
 def main():
 
     print "Bot Starting..."
 
     reddit = praw.Reddit('MineralFinderBot') # SET UP NEW CLIENT AND ALL THAT, ALL IN PRAW.INI
+    enwp = pywikibot.Site('en', 'wikipedia')
 
     date_format='%m/%d/%Y %H:%M:%S %Z'
     date = datetime.datetime.now()
@@ -125,7 +129,8 @@ def main():
 
                             print time_diff, " seconds old"
 
-                            if time_diff < 3600: # if comment is less than an hour old, post reply
+                            if time_diff < 36000: # if comment is less than an hour old, post reply
+                                                  # changed to 10 hours for testing
 
                                 print "\n"
                                 print "Bot replying to :", comment.id,
@@ -167,8 +172,6 @@ def main():
 
                                 while i < len(minerals_replying_to):
 
-                                    this_mineral = minerals_replying_to[i]
-
                                     mineral_links += "### " + minerals_replying_to[i].lower() + "  \n"\
                                                      " [Wikipedia page for " + \
                                                      minerals_replying_to[i].lower() + \
@@ -189,6 +192,37 @@ def main():
                                                      ":-------|  " + "\n"\
                                         "[Link to Google images:] (" + "https://www.google.com/search?tbm=isch&q="\
                                         + minerals_replying_to[i] + "+mineral) |  " + "\n"
+
+                                    page = pywikibot.Page(enwp, minerals_replying_to[i].title())
+
+                                    wikitext = page.get()
+                                    wikicode = mwparserfromhell.parse(wikitext)
+                                    templates = wikicode.filter_templates()
+
+                                    l = 0
+                                    while (l < len(templates)):
+                                        temp_template = templates[l]
+                                        if re.match("\sInfobox mineral\s", str(temp_template.name)):
+                                            min_template = temp_template
+                                            l = len(templates) # break while loop
+
+                                        else:
+                                            min_template = templates[0]  # Build min_template as junk if min infobox
+                                                                         # not found
+                                        l += 1
+
+# INFOBOX IMPLEMENTATION
+                                    if re.match("\sInfobox mineral\s", str(min_template.name)):
+                                        print "\n"
+                                        print "Mineral: ", minerals_replying_to[i]
+                                        print "Color: ", (min_template.get("color").value).encode('utf8','ignore')
+                                        print "Habit:", (min_template.get("habit").value).encode('utf8', 'ignore')
+                                        print "Mohs Hardness: ", (min_template.get("mohs").value).encode('utf8',
+                                                                                                         'ignore')
+                                        print "Luster: ", min_template.get("luster").value.encode('utf8', 'ignore')
+                                        print "Streak: ", (min_template.get("streak").value).encode('utf8', 'ignore')
+# STILL NEED TO ACTUALLY ADD TO COMMENTS, RATHER THAN PRINT TO CONSOLE
+                                    mineral_links += ""
 
                                     j =0; k = 1
                                     while j < image_length and k <= 3: # changes number of wiki images added
@@ -228,21 +262,21 @@ def main():
 
 
                                 print finished_mineral_reply
-                                print "Posting comment..."
+                                print "Posting comment.."
 
-                                comment.reply(finished_mineral_reply)
+                                #comment.reply(finished_mineral_reply)
 
-                                with open("comments_replied_to.txt","a") as myfile:
+                                #with open("comments_replied_to.txt","a") as myfile:
 
-                                    myfile.write(comment.id + "\n")
+                                    #myfile.write(comment.id + "\n")
 
-                                comments_replied_to.append(comment.id)
+                                #comments_replied_to.append(comment.id)
 
-                                with open("comments_bot_submissions.txt", "a") as f:
+                                #with open("comments_bot_submissions.txt", "a") as f:
 
-                                    f.write(submission.id + "\n")
+                                    #f.write(submission.id + "\n")
 
-                                comments_bot_submissions.append(submission.id)
+                                #comments_bot_submissions.append(submission.id)
 
                                 date = datetime.datetime.now()
                                 print "Comment posted at " + date.strftime(date_format)
@@ -272,17 +306,22 @@ def main():
 
             author = comment.author
 
-            if re.match('MineralFinderBot|throwAwayBotToday', author.name):
+            if author is None:
+                print "Read error in:", comment.id
+                print comment.body
+            else:
 
-                with open("comments_bot_made.txt", "a") as myfile:
+                if re.match('MineralFinderBot|throwAwayBotToday', author.name):
 
-                    if comment.id not in comments_bot_made:
+                    with open("comments_bot_made.txt", "a") as myfile:
 
-                        print "New posted comment id: ", comment.id
+                        if comment.id not in comments_bot_made:
 
-                        myfile.write(comment.id + "\n")
+                            print "New posted comment id: ", comment.id
 
-                        comments_bot_made.append(comment.id)
+                            myfile.write(comment.id + "\n")
+
+                            comments_bot_made.append(comment.id)
 
 
 
