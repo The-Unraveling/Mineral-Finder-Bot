@@ -10,20 +10,6 @@ import datetime
 import time
 import sys
 
-# WRITE CERTAIN INFO(BOT STARTING, BOT COMMENTING) TO A TXT FILE..
-
-def open_read_make(a):
-    if not os.path.isfile(a+".txt"):
-        print a+".txt not found, making file..."
-        comments_bot_made = []
-
-    else:
-        # read file into a list and remove any empsy values
-        with open("comments_bot_made.txt", "r") as f:
-            print "comments_bot_made.txt found, reading file:"
-            comments_bot_made = f.read()
-            comments_bot_made = comments_bot_made.split("\n")
-            comments_bot_made = list(filter(None, comments_bot_made))
 
 def main():
 
@@ -43,7 +29,7 @@ def main():
 
     print "Done!"
 
-    subreddit = reddit.subreddit('whatsthisrock+whatisthisthing') #whatsthisrock #add whatisthisthing ?
+    subreddit = reddit.subreddit('whatsthisrock') #whatsthisrock #add whatisthisthing ?
 
     # Have we run this code before? If not, create empty list
     if not os.path.isfile("comments_replied_to.txt"):
@@ -91,7 +77,6 @@ def main():
         submission.comments.replace_more(limit=0)   #UNCOMMENT THESE 3 LINES
         for comment in submission.comments.list():  #COMMENT LINE ABOVE, INDENT CODE BELOW
 
-        # Maybe add submission filter here? and make this work with task scheduler
             if submission.id not in comments_bot_submissions:
 
                 if comment.id not in comments_replied_to:
@@ -155,13 +140,20 @@ def main():
 
                                 minerals_replying_to = []
                                 while i < len(minerals_in_comment):
+
                                     if not re.search(minerals_in_comment[i], mineral_greeting_part2, re.IGNORECASE):
+
                                         mineral_greeting_part2 += (minerals_in_comment[i])
                                         minerals_replying_to.append(minerals_in_comment[i])
+
                                         if i < (len(minerals_in_comment) - 1):
+
                                             mineral_greeting_part2 += ", "
+
                                         else:
+
                                             mineral_greeting_part2 += ".  " + "\n"
+
                                     i += 1
 
                                 mineral_greeting += mineral_greeting_part2.lower()
@@ -205,8 +197,10 @@ def main():
                                                             wiki_image_list[j], re.IGNORECASE)
 
                                         if is_photo_mineral:
+
                                             mineral_links += "[ Wikipedia Photo " + str(k) + " of " + \
                                                     minerals_replying_to[i].lower() + ".]"
+
                                             mineral_links += "(" + wiki_image_list[j] + ") |  "\
                                                             + "\n"
 
@@ -237,12 +231,17 @@ def main():
                                 print "Posting comment..."
 
                                 comment.reply(finished_mineral_reply)
+
                                 with open("comments_replied_to.txt","a") as myfile:
+
                                     myfile.write(comment.id + "\n")
+
                                 comments_replied_to.append(comment.id)
 
                                 with open("comments_bot_submissions.txt", "a") as f:
+
                                     f.write(submission.id + "\n")
+
                                 comments_bot_submissions.append(submission.id)
 
                                 date = datetime.datetime.now()
@@ -253,11 +252,37 @@ def main():
                                 print "comments!"
 
                         else:
+
                             with open("comments_bot_made.txt", "a") as myfile:
+
                                 if comment.id not in comments_bot_made:
+
                                     myfile.write(comment.id + "\n")
+
                                     comments_bot_made.append(comment.id)
+
                             open("comments_bot_submissions.txt", "a")
+
+
+    for submission in subreddit.new(limit=10):
+
+        submission.comments.replace_more(limit=0)
+
+        for comment in submission.comments.list():
+
+            author = comment.author
+
+            if re.match('MineralFinderBot|throwAwayBotToday', author.name):
+
+                with open("comments_bot_made.txt", "a") as myfile:
+
+                    if comment.id not in comments_bot_made:
+
+                        print "New posted comment id: ", comment.id
+
+                        myfile.write(comment.id + "\n")
+
+                        comments_bot_made.append(comment.id)
 
 
 
