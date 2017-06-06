@@ -33,7 +33,7 @@ def main():
 
     print "Done!"
 
-    subreddit = reddit.subreddit('whatsthisrock') #whatsthisrock #add whatisthisthing ?
+    subreddit = reddit.subreddit('whatsthisrock+mineralfinderbot') #whatsthisrock #add whatisthisthing ?
 
     # Have we run this code before? If not, create empty list
     if not os.path.isfile("comments_replied_to.txt"):
@@ -77,11 +77,12 @@ def main():
     print "Time: ", date.strftime(date_format)
     #for comment in subreddit.stream.comments():    #this line allows for indefinite running(DANGEROUS ON BIG SUBREDDITS)
 
-    for submission in subreddit.new(limit=10):       #IN ORDER TO RUN ON SCHEDULER
+    for submission in subreddit.hot(limit=10):       #IN ORDER TO RUN ON SCHEDULER
         submission.comments.replace_more(limit=0)   #UNCOMMENT THESE 3 LINES
         for comment in submission.comments.list():  #COMMENT LINE ABOVE, INDENT CODE BELOW
 
-            if submission.id not in comments_bot_submissions:
+            #if submission.id not in comments_bot_submissions:
+            if re.search("mineralfinderbot", comment.body, re.IGNORECASE):
 
                 if comment.id not in comments_replied_to:
 
@@ -202,17 +203,20 @@ def main():
                                     l = 0
                                     while (l < len(templates)):
                                         temp_template = templates[l]
-                                        if re.match("\sInfobox mineral\s", str(temp_template.name)):
+                                        box_name = temp_template.name
+                                        if re.search("Infobox mineral", box_name.strip()):
                                             min_template = temp_template
+                                            print "ding!"
                                             l = len(templates) # break while loop
 
                                         else:
                                             min_template = templates[0]  # Build min_template as junk if min infobox
                                                                          # not found
                                         l += 1
-
+                                    print min_template.name
+                                    info_box_name = min_template.name
 # INFOBOX IMPLEMENTATION
-                                    if re.match("\sInfobox mineral\s", str(min_template.name)):
+                                    if re.match("Infobox mineral", info_box_name.strip()):
                                         print "\n"
                                         print "Mineral: ", minerals_replying_to[i]
                                         print "Color: ", (min_template.get("color").value).encode('utf8','ignore')
@@ -261,7 +265,7 @@ def main():
                                 finished_mineral_reply += bot_beep_boop
 
 
-                                print finished_mineral_reply
+                                #print finished_mineral_reply
                                 print "Posting comment.."
 
                                 #comment.reply(finished_mineral_reply)
