@@ -1,5 +1,5 @@
 # MinDatBot.py
-# Author: The-Unraveling
+# Author: richcnelson
 
 import praw
 import re
