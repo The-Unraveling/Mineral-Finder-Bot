@@ -42,7 +42,7 @@ def main():
 
     # If we've run code before, load list of posts we have replied to
     else:
-        #read file into a list and remove any empsy values
+        #read file into a list and remove any empty values
         with open("comments_replied_to.txt", "r") as f:
             print "comments_replied_to.txt found, reading file:"
             comments_replied_to = f.read()
@@ -54,7 +54,7 @@ def main():
         comments_bot_made = []
 
     else:
-        # read file into a list and remove any empsy values
+        # read file into a list and remove any empty values
         with open("comments_bot_made.txt", "r") as f:
             print "comments_bot_made.txt found, reading file:"
             comments_bot_made = f.read()
@@ -66,7 +66,7 @@ def main():
         comments_bot_submissions = []
 
     else:
-        # read file into a list and remove any empsy values
+        # read file into a list and remove any empty values
         with open("comments_bot_submissions.txt", "r") as f:
             print "comments_bot_submissions.txt found, reading file:"
             comments_bot_submissions = f.read()
@@ -77,9 +77,9 @@ def main():
     print "Time: ", date.strftime(date_format)
     #for comment in subreddit.stream.comments():    #this line allows for indefinite running(DANGEROUS ON BIG SUBREDDITS)
 
-    for submission in subreddit.hot(limit=10):       #IN ORDER TO RUN ON SCHEDULER
+    for submission in subreddit.hot(limit=10):      #IN ORDER TO RUN ON SCHEDULER
         submission.comments.replace_more(limit=0)   #UNCOMMENT THESE 3 LINES
-        for comment in submission.comments.list():  #COMMENT LINE ABOVE, INDENT CODE BELOW
+        for comment in submission.comments.list():  #COMMENT LINE ABOVE(subreddit.stream), INDENT CODE BELOW
 
             #if submission.id not in comments_bot_submissions:
             if re.search("mineralfinderbot", comment.body, re.IGNORECASE):
